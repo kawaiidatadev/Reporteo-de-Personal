@@ -3,6 +3,78 @@ from verificar_db import obtener_datos_personal
 from segurity_copy import copiar_base_de_datos
 from excel import manejar_excel
 
+running_gif = True  # Variable para controlar la ejecución del GIF
+
+
+
+def set_always_on_top():
+    # Hacer la ventana siempre en la parte superior (funciona en Windows)
+    hwnd = pygame.display.get_wm_info()['window']
+    ctypes.windll.user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002)
+    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+                          win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+def mostrar_gif():
+    global running_gif  # Usar la variable global
+    try:
+        pygame.init()
+        gif_paths = [
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif1.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif2.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif3.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif4.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif5.gif'
+        ]
+
+        gif_path = random.choice(gif_paths)
+        print(f"GIF seleccionado: {gif_path}")
+
+        pil_image = Image.open(gif_path)
+
+        gif_width, gif_height = pil_image.size
+        ventana = pygame.display.set_mode((gif_width, gif_height), pygame.NOFRAME | pygame.SRCALPHA)
+        pygame.display.set_caption("Cargando...")
+
+        frames = []
+        while True:
+            try:
+                pil_image_data = pil_image.tobytes()
+                frame = pygame.image.fromstring(pil_image_data, pil_image.size, pil_image.mode)
+                frames.append(frame)
+                pil_image.seek(pil_image.tell() + 1)
+            except EOFError:
+                break
+
+        running = True
+        clock = pygame.time.Clock()
+        frame_count = len(frames)
+        current_frame = 0
+
+        set_always_on_top()
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            set_always_on_top()
+
+            ventana.fill((0, 0, 0, 0))
+            ventana.blit(frames[current_frame], (0, 0))
+            pygame.display.update()
+
+            current_frame = (current_frame + 1) % frame_count
+            clock.tick(10)  # Ajuste para un GIF más fluido
+
+            if not running_gif:  # Salir del bucle si la variable se establece en False
+                running = False
+
+        pygame.quit()
+    except Exception as e:
+        print(f"Error en la ventana principal: {e}")
+        pygame.quit()
+        sys.exit()
+
 def cargar_datos_personal():
     """Obtiene los datos personales desde la base de datos."""
     datos = obtener_datos_personal()
@@ -58,12 +130,15 @@ def calcular_puestos_ocupados(datos_personal):
 
 
 def main():
+    global running_gif  # Acceso a la variable global
+
     plantilla_excel = r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\p1.xlsx'
     excel = r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Data\Reportes\Reporte de Personal\Plantilla de produccion.xlsx'
 
     # Ejecutar carga.py en segundo plano
-    carga_process = subprocess.Popen(['python', r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\carga.py'])
-    time.sleep(2)
+    carga_thread = threading.Thread(target=mostrar_gif)
+    carga_thread.start()
+    time.sleep(2)  # Espera a que la carga inicie correctamente
 
 
     # Llamada a la función para obtener los datos
@@ -84,9 +159,9 @@ def main():
         manejar_excel(excel)
 
     # Finalizar el proceso de carga
-    carga_process.terminate()  # Termina el proceso de carga.py
-    carga_process.wait()  # Espera a que el proceso termine
-    print('Función carga termino')
+    running_gif = False  # Termina el bucle del GIF
+    carga_thread.join()  # Espera a que el hilo de carga termine antes de salir
+    print('Función carga terminó')
     sys.exit(1)
     sys.exit()
 
