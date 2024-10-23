@@ -19,7 +19,21 @@ def set_always_on_top():
 def mostrar_gif():
     try:
         pygame.init()
-        gif_path = os.path.join('resources', 'gif_de_carga.gif')
+        # Lista de rutas de los GIFs
+        gif_paths = [
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif1.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif2.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif3.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif4.gif',
+            r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\gif5.gif'
+        ]
+
+        # Elegir aleatoriamente un gif_path
+        gif_path = random.choice(gif_paths)
+
+        # Imprimir el gif_path elegido
+        print(f"GIF seleccionado: {gif_path}")
+
         pil_image = Image.open(gif_path)
 
         gif_width, gif_height = pil_image.size
