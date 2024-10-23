@@ -1,4 +1,10 @@
-from common.__init__ import *
+import ctypes  # Para usar MessageBox en Windows
+from PIL import Image, ImageTk
+import pygame
+import sys
+import win32gui
+import win32con
+import random
 
 """
 Este es el codigo que se debe ejecutar primero que nada, en un proceso separado de main, en segundo plano,
