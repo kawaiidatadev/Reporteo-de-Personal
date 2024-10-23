@@ -25,7 +25,7 @@ def obtener_datos_personal():
         resultados = cursor.fetchall()
 
         if resultados:
-            mostrar_mensaje("Conexión exitosa a la base de datos.", "Éxito")
+            print("Conexión exitosa a la base de datos.", "Éxito")
 
         conexion.close()
         return resultados
