@@ -11,5 +11,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import threading
 import subprocess
-
-
+import pygame
+import sys
+import win32gui
+import win32con

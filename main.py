@@ -1,3 +1,6 @@
+import sys
+import time
+
 from common.__init__ import *
 from verificar_db import obtener_datos_personal
 from segurity_copy import copiar_base_de_datos
@@ -64,6 +67,8 @@ def main():
 
     # Ejecutar carga.py en segundo plano
     carga_process = subprocess.Popen(['python', 'carga.py'])
+    time.sleep(2)
+
 
     # Llamada a la función para obtener los datos
     datos_personal = cargar_datos_personal()
@@ -77,6 +82,7 @@ def main():
 
         # Guardar datos en el archivo Excel
         guardar_datos_en_excel(datos_personal, plantilla_excel)
+        time.sleep(1)
 
         # Ejecutar el proceso principal
         manejar_excel(excel)
@@ -84,6 +90,9 @@ def main():
     # Finalizar el proceso de carga
     carga_process.terminate()  # Termina el proceso de carga.py
     carga_process.wait()  # Espera a que el proceso termine
+    print('Función carga termino')
+    sys.exit(1)
+    sys.exit()
 
 if __name__ == "__main__":
     main()
