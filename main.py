@@ -2,7 +2,6 @@ from common.__init__ import *
 from verificar_db import obtener_datos_personal
 from segurity_copy import copiar_base_de_datos
 from excel import manejar_excel
-from carga import mostrar_gif
 
 def cargar_datos_personal():
     """Obtiene los datos personales desde la base de datos."""
@@ -59,16 +58,11 @@ def calcular_puestos_ocupados(datos_personal):
 
 
 def main():
-    if 1 == 0:
-        mostrar_gif()
-    else:
-        print('Todo chido')
-
     plantilla_excel = r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\plantilla_personal\p1.xlsx'
     excel = r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Data\Reportes\Reporte de Personal\Plantilla de produccion.xlsx'
 
     # Ejecutar carga.py en segundo plano
-    carga_process = subprocess.Popen(['python', 'carga.py'])
+    carga_process = subprocess.Popen(['python', r'\\mercury\Mtto_Prod\00_Departamento_Mantenimiento\ESD\Software\Recurses\carga.py'])
     time.sleep(2)
 
 
