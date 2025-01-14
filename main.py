@@ -74,6 +74,8 @@ def mostrar_gif():
         print(f"Error en la ventana principal: {e}")
         pygame.quit()
         sys.exit()
+        sys.exit(0)
+        sys.exit(1)
 
 def cargar_datos_personal():
     """Obtiene los datos personales desde la base de datos."""
@@ -160,10 +162,12 @@ def main():
 
     # Finalizar el proceso de carga
     running_gif = False  # Termina el bucle del GIF
-    carga_thread.join()  # Espera a que el hilo de carga termine antes de salir
+    # carga_thread.join()  # Espera a que el hilo de carga termine antes de salir
     print('Función carga terminó')
-    sys.exit(1)
     sys.exit()
+    sys.exit(0)
+    sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
