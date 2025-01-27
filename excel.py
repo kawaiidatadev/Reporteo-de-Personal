@@ -40,7 +40,6 @@ def copiar_excel(origen, destino):
         print(f"Error al copiar el archivo: {e}")
 
 
-
 # Función para abrir el archivo de Excel, actualizar conexiones y guardar sin mostrar Excel
 def actualizar_conexiones_excel(ruta_excel):
     excel_app = None
@@ -56,30 +55,29 @@ def actualizar_conexiones_excel(ruta_excel):
         # Abrir el archivo copiado
         wb = excel_app.Workbooks.Open(ruta_excel)
 
-        # Actualizar todas las conexiones
-        wb.RefreshAll()
-
-        # Esperar a que las actualizaciones terminen
-        time.sleep(2)  # Espera un tiempo fijo (ajustable según tu necesidad)
-
-        # Alternativamente, podrías iterar sobre las conexiones
+        # Actualizar cada conexión individualmente 3 veces
         for connection in wb.Connections:
-            connection.Refresh()
+            for i in range(3):  # Repetir 3 veces
+                try:
+                    print(f"Actualizando conexión '{connection.Name}' (Intento {i + 1})")
+                    connection.Refresh()
+                    time.sleep(3)  # Pausa para evitar conflictos entre actualizaciones
+                except Exception as e:
+                    print(f"Error al actualizar la conexión '{connection.Name}' en intento {i + 1}: {e}")
 
         # Guardar los cambios
         wb.Save()
+        print(f"Conexiones actualizadas y archivo guardado en {ruta_excel}")
 
         # Cerrar el archivo
         wb.Close()
 
-        # Salir de la aplicación de Excel
-        excel_app.Quit()
-        print(f"Conexiones actualizadas y archivo guardado en {ruta_excel}")
     except Exception as e:
         print(f"Error al actualizar las conexiones de Excel: {e}")
     finally:
         if excel_app:
             excel_app.Quit()  # Asegurarse de que Excel se cierre correctamente
+
 
 # Función para abrir la carpeta de descargas en una ventana maximizada
 def abrir_carpeta_descargas(ruta_descargas):
