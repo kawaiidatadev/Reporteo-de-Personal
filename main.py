@@ -165,6 +165,7 @@ def main():
     # carga_thread.join()  # Espera a que el hilo de carga termine antes de salir
     print('Función carga terminó')
     sys.exit()
+
     sys.exit(0)
     sys.exit(1)
 
